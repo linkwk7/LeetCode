@@ -8,39 +8,58 @@ using std::vector;
 class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        std::vector<std::vector<int>> result;
-        std::vector<int> path;
-
         std::sort(nums.begin(), nums.end());
 
-        fourSumUtil(nums, 0, target, 0, path, result);
-    
+        std::vector<std::vector<int>> result;
+
+        for (int i=0,sz=nums.size(); i<sz-3; i++) {
+            if (i == 0 || nums[i] != nums[i-1]) {
+                std::vector<std::vector<int>> pairs;
+
+                threeSum(nums, i+1, target-nums[i], pairs);
+
+                for (int j=0,s=pairs.size(); j<s; j++) {
+                    result.push_back(std::vector<int> {nums[i], pairs[j][0], pairs[j][1], pairs[j][2]});
+                }
+            }
+        }
+
         return result;
     }
 
-    void fourSumUtil(std::vector<int> & nums, int begin, int target, int choosen, std::vector<int> & path, std::vector<std::vector<int>> & result) {
-        if (choosen == 4 && target == 0) {
-            if (std::find(result.rbegin(), result.rend(), path) == result.rend()) {
-                result.push_back(path);
+    void threeSum(vector<int>& nums, int begin, int target, std::vector<std::vector<int>> & result) {
+        for (int i=begin,sz=nums.size(); i<sz-2; i++) {
+            if (i == begin || nums[i] != nums[i-1]) {
+                std::vector<std::vector<int>> pairs;
+                twoSum(nums, i+1, target-nums[i], pairs);
+
+                for (int j=0,s=pairs.size(); j<s; j++) {
+                    result.push_back(std::vector<int> {nums[i], pairs[j][0], pairs[j][1]});
+                }
             }
-            return;
         }
+    }
 
-        if (choosen>=4 || nums.size()-begin < 4-choosen) {
-            return;
+    void twoSum(std::vector<int> & nums, int begin, int target, std::vector<std::vector<int>> & pairs) {
+        int first = begin;
+        int last = nums.size() - 1;
+
+        for (; first<last; ) {
+            int sum = nums[first]+nums[last];
+
+            if (sum < target) {
+                first++;
+            } else if (sum > target) {
+                last--;
+            } else {
+                pairs.push_back(std::vector<int> {nums[first], nums[last]});
+
+                int recFirst = first;
+                int recLast = last;
+                for (; nums[first] == nums[recFirst]; first++) {}
+                for (; nums[last]==nums[recLast]; last--) {}
+            }
         }
-
-        if (begin >= nums.size()) {
-            return;
-        }
-
-        path.push_back(nums[begin]);
-        fourSumUtil(nums, begin+1, target-nums[begin], choosen+1, path, result);
-        path.pop_back();
-
-        fourSumUtil(nums, begin+1, target, choosen, path, result);
-
-        return;
     }
 };
 

@@ -10,11 +10,8 @@ public:
         std::sort(nums.begin(), nums.end());
     
         std::vector<std::vector<int>> result;
-        int last = 0;
         for (int i=0,sz=nums.size(); i<sz-2; i++) {
-            if (i == 0 || nums[i] != last) {
-                last = nums[i];
-
+            if (i == 0 || nums[i] != nums[i-1]) {
                 std::vector<std::vector<int>> pairs;
                 twoSum(nums, i+1, -nums[i], pairs);
 
