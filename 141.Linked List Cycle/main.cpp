@@ -8,34 +8,26 @@ struct ListNode {
 
 class Solution {
 public:
-    ListNode *detectCycle(ListNode *head) {
-        if (head == NULL) {
-            return NULL;
-        }
-
+    bool hasCycle(ListNode *head) {
         ListNode * slow = head;
         ListNode * fast = head;
-    
+
         do {
             if (slow == NULL || fast == NULL) {
-                return NULL;
+                return false;
             }
 
             slow = slow->next;
             fast = fast->next;
-
+            
             if (fast == NULL) {
-                return NULL;
+                return false;
             }
-            fast = fast->next;
-        } while(slow != fast);
-    
-        for (slow = head; slow != fast; ) {
-            slow = slow->next;
-            fast = fast->next;
-        }
 
-        return slow;
+            fast = fast->next;
+
+        } while (slow != fast);
+        return true;
     }
 };
 
