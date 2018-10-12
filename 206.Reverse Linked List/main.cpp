@@ -43,25 +43,15 @@ public:
             return head;
         }
 
-        ListNode * tail = nullptr;
-        for (tail = head; tail->next != NULL; tail = tail->next) {
+        ListNode * last = NULL;
+        for (; head != NULL; ) {
+            ListNode * next = head->next;
+            head->next = last;
+            last = head;
+            head = next;
         }
 
-        reverseListUtil(head, tail);
-        head->next = NULL;
-    
-        return tail;
-    }
-
-    ListNode * reverseListUtil(ListNode * head, ListNode * tail) {
-        if (head == tail) {
-            return head;
-        }
-        
-        ListNode * last = reverseListUtil(head->next, tail);
-        last->next = head;
-
-        return head;
+        return last;
     }
 };
 
