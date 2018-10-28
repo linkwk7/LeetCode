@@ -1,27 +1,55 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <functional>
+#include <algorithm>
 
 using std::vector;
 
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        std::priority_queue<int, std::vector<int>, std::greater<int>> que;
+        // O(NlogN)
+        // std::priority_queue<int, std::vector<int>, std::greater<int>> que;
 
-        if (nums.size() < k) {
-            return -1;
-        }
+        // if (nums.size() < k) {
+        //     return -1;
+        // }
 
-        for (auto iter=nums.begin(); iter!=nums.end(); iter++) {
-            que.push(*iter);
-            if (que.size() > k) {
-                que.pop();
+        // for (auto iter=nums.begin(); iter!=nums.end(); iter++) {
+        //     que.push(*iter);
+        //     if (que.size() > k) {
+        //         que.pop();
+        //     }
+        // }
+
+        // return que.top();
+
+        int l = 0;
+        int r = nums.size()-1;
+        int index = nums.size()-k;
+        for (; true;) {
+            int mid = partition(nums, l, r);
+            if (mid == index) {
+                return nums[mid];
+            } else if (mid > index) {
+                r = mid-1;
+            } else {
+                l = mid+1;
             }
         }
+    }
 
-        return que.top();
+    int partition(std::vector<int> & nums, int l, int r) {
+        int pivot = nums[l];
+        int prev = l;
+        int cur = l+1;
+
+        for (; cur <= r; cur++) {
+            if (nums[cur] < pivot) {
+                std::swap(nums[++prev], nums[cur]);
+            }
+        }
+        std::swap(nums[l], nums[prev]);
+        return prev;
     }
 };
 
