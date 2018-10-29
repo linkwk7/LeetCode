@@ -11,24 +11,21 @@ public:
 
         std::vector<std::vector<int>> result;
         std::vector<int> path;
-        combinationSumUtil(result, path, candidates, target,0);
+        combinationSumAux(result, path, candidates, 0, target);
 
         return result;
     }
 
-    void combinationSumUtil(std::vector<std::vector<int>> & result, std::vector<int>& path, const vector<int>& candidates, int target, int start) {
+    void combinationSumAux(std::vector<std::vector<int>> & result, std::vector<int> & path, const std::vector<int> & candidates, int current, int target) {
         if (target == 0) {
             result.push_back(path);
-        } else if (target < 0) {
-            return;
-        } else {
-            for (int i=start, sz=candidates.size(); i<sz; i++) {
-                if (i > start && candidates[i]==candidates[i-1]) {
+        } else if (target > 0) {
+            for (int i=current; i<candidates.size(); i++) {
+                if (i>current && candidates[i]==candidates[i-1]) {
                     continue;
                 }
-
                 path.push_back(candidates[i]);
-                combinationSumUtil(result, path, candidates, target-candidates[i], i+1);
+                combinationSumAux(result, path, candidates, i+1, target-candidates[i]);
                 path.pop_back();
             }
         }
