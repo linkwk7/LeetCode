@@ -40,7 +40,7 @@ class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
         if (head == NULL) {
-            return head;
+            return NULL;
         }
 
         ListNode * last = NULL;

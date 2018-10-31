@@ -39,37 +39,27 @@ void printList(ListNode * lst) {
 class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
-        ListNode * last = nullptr;
-        ListNode * first = head;
-        if (first == NULL) {
-            return head;
-        }
-        ListNode * second = head->next;
-        for (; first!=NULL && second!=NULL;) {
-            if (last == nullptr) {
-                head = second;
+        ListNode * current = head;
+        ListNode * last = NULL;
+        for (; current!=NULL && current->next!=NULL; ) {
+            ListNode * next = current->next;
+            ListNode * afterNext = next->next;
+            next->next = current;
+            current->next = afterNext;
+            if (last == NULL) {
+                head = next;
             } else {
-                last->next = second;
+                last->next = next;
             }
-
-            ListNode * next = second->next;
-            second->next = first;
-            first->next = next;
-            last = first;
-
-            first = first->next;
-            if (first == NULL) {
-                break;
-            }
-            second = first->next;
+            last = current;
+            current = afterNext;
         }
-
         return head;
     }
 };
 
 int main() {
-    ListNode * lst = construct(std::vector<int> {1});
+    ListNode * lst = construct(std::vector<int> {1,2,3,4,5,6});
 
     Solution s;
     lst = s.swapPairs(lst);
