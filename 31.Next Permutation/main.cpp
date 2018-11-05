@@ -16,8 +16,6 @@ public:
         int swap = nums.size()-1;
         for (; swap>=i && nums[swap] <= nums[i-1]; swap--) {}
 
-        std::cout<<i<<" "<<swap<<std::endl;
-
         if (i != 0) {
             std::swap(nums[i-1], nums[swap]);
         }
