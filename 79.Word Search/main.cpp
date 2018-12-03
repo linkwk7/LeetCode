@@ -8,14 +8,11 @@ using std::string;
 class Solution {
 public:
     bool exist(vector<vector<char>>& board, string word) {
-        std::vector<std::vector<bool>> seen;
-        for (int i=0,sz=board.size(); i<sz; i++) {
-            seen.push_back(std::vector<bool>(board[0].size(), false));
-        }
+        std::vector<std::vector<bool>> seen(board.size(), std::vector<bool>(board[0].size(), false));
 
         for (int row=0,sz=board.size(); row<sz; row++) {
             for (int column=0,s=board[0].size(); column<s; column++) {
-                if (searchRecur(board, seen, column, row, word, 0)) {
+                if (existAux(board, seen, column, row, word, 0)) {
                     return true;
                 }
             }
@@ -23,44 +20,33 @@ public:
         return false;
     }
 
-    bool searchRecur(std::vector<std::vector<char>> & board, std::vector<std::vector<bool>> & seen, int x,int y,
-        const std::string & word, int current) {
+    bool existAux(std::vector<std::vector<char>> & board, std::vector<std::vector<bool>> & seen, int x, int y, 
+        const std::string & word, int pos) {
+        if (y < 0 || y >= board.size() || x < 0 || x >= board[0].size()) {
+            return false;
+        }
+
         if (seen[y][x] == true) {
             return false;
         }
 
-        if (board[y][x] == word[current]) {
+        int offset[4][2] = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        if (board[y][x] == word[pos]) {
             seen[y][x] = true;
 
-            if (current == word.size()-1) {
+            if (pos+1 == word.size()) {
                 return true;
             }
 
-            if (y >= 1) {
-                if (searchRecur(board, seen, x, y-1, word, current+1)) {
-                    return true;
-                }
-            }
-            if (y < board.size()-1) {
-                if (searchRecur(board, seen, x, y+1, word, current+1)) {
-                    return true;
-                }
-            }
-            if (x >= 1) {
-                if (searchRecur(board, seen, x-1, y, word, current+1)) {
-                    return true;
-                }
-            }
-            if (x < board[0].size()-1) {
-                if (searchRecur(board,seen, x+1, y, word, current+1)) {
+            for (int i=0; i<4; i++) {
+                if (existAux(board, seen, x+offset[i][0], y+offset[i][1], word, pos+1)) {
                     return true;
                 }
             }
 
             seen[y][x] = false;
-            return false;
         }
-
         return false;
     }
 };

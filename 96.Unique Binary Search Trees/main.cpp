@@ -1,31 +1,21 @@
 #include <iostream>
 #include <map>
+#include <vector>
 
 class Solution {
 public:
     int numTrees(int n) {
-        std::map<std::pair<int,int>, int> tmp;
+        std::vector<int> dp(n+1, 0);
 
-        return numTreesRange(tmp, 1, n+1);
-    }
+        dp[0] = 1;
 
-    int numTreesRange(std::map<std::pair<int,int>, int> & res, int first, int last) {
-        auto iter = res.find(std::make_pair(first,last));
-        if (iter != res.end()) {
-            return iter->second;
+        for (int i=1; i<=n; i++) {
+            for (int j=0; j<i; j++) {
+                dp[i] += dp[j]*dp[i-1-j];
+            }
         }
 
-        if (last - first <= 1) {
-            res[std::make_pair(first,last)] = 1;
-            return 1;
-        }
-
-        int count = 0;
-        for (int i=first; i<last; i++) {
-            count += numTreesRange(res, first, i)*numTreesRange(res, i+1, last);
-        }
-        res[std::make_pair(first,last)] = count;
-        return count;
+        return dp.back();
     }
 };
 

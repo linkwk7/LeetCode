@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using std::vector;
 
@@ -7,28 +8,27 @@ class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         std::vector<std::vector<int>> result;
-        permuteUniqueAux(result, nums, 0);
+
+        std::sort(nums.begin(), nums.end());
+        
+        permuteUniqueAux(nums, 0, result);
+
         return result;
     }
 
-    void permuteUniqueAux(std::vector<std::vector<int>> & result, std::vector<int> nums, int current) {
-        if (current >= nums.size()) {
+    void permuteUniqueAux(std::vector<int> nums, int pos, std::vector<std::vector<int>> & result) {
+        if (pos == nums.size()-1) {
             result.push_back(nums);
-        } else {
-            for (int i=current,sz=nums.size(); i<sz; i++) {
-                bool exist = false;
-                for (int k=current; k<i; k++) {
-                    if (nums[k] == nums[i]) {
-                        exist = true;
-                        break;
-                    }
-                }
-                if (!exist) {
-                    std::swap(nums[current], nums[i]);
-                    permuteUniqueAux(result, nums, current+1);
-                    std::swap(nums[current], nums[i]);
-                }
+            return;
+        }
+
+        for (int i=pos,sz=nums.size(); i<sz; i++) {
+            if (i>pos && nums[i]==nums[pos]) {
+                continue;
             }
+
+            std::swap(nums[i], nums[pos]);
+            permuteUniqueAux(nums, pos+1, result);
         }
     }
 };

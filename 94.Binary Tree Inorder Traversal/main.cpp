@@ -13,23 +13,17 @@ public:
     vector<int> inorderTraversal(TreeNode* root) {
         std::vector<int> result;
 
-        TreeNode * current = root;
-        std::stack<TreeNode *> path;
-        for (; true;) {
-            for (; current!=NULL; current=current->left) {
-                path.push_back(current);
+        std::stack<TreeNode*> stk;
+        for (; root != NULL || !stk.empty(); ) {
+            for (; root!=NULL; ) {
+                stk.push(root);
+                root = root->left;
             }
-
-            if (path.empty()) {
-                break;
-            }
-
-            current = path.top();
-            path.pop();
-            result.push_back(current->val);
-            current = current->right;
+            root = stk.top();
+            stk.pop();
+            result.push_back(root->val);
+            root = root->right;
         }
-
         return result;
     }
 };

@@ -6,23 +6,19 @@ using std::vector;
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        std::vector<std::vector<int>> result;
-        std::vector<int> current;
-
-        subsetsAux(current, nums, 0, result);
+        std::vector<std::vector<int>> result(1, std::vector<int>());
+        
+        for (int i=0,sz=nums.size(); i<sz; i++) {
+            int resz = result.size();
+            for (int j=0; j<resz; j++) {
+                result.push_back(result[j]);
+            }
+            for (int j=0; j<resz; j++) {
+                (result.begin()+j)->push_back(nums[i]);
+            }
+        }
 
         return result;
-    }
-
-    void subsetsAux(std::vector<int> & current, std::vector<int> & nums, int begin, std::vector<std::vector<int>> & result) {
-        if (begin >= nums.size()) {
-            result.push_back(current);
-        } else {
-            subsetsAux(current, nums, begin+1, result);
-            current.push_back(nums[begin]);
-            subsetsAux(current, nums, begin+1, result);
-            current.pop_back();
-        }
     }
 };
 
